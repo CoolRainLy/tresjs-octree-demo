@@ -7,14 +7,14 @@ import {useRenderLoop} from "@tresjs/core";
 
 import type {AnimationAction} from 'three'
 import {onMounted, ref} from "vue";
+import {useAnimations} from "@tresjs/cientos";
 
 const modelStore = useModelStoreWithOut()
 
 // 角色默认位置
 const position = new Vector3(-1, 0, -3.5)
 // 获取角色和动画
-const {scene, animations} = await modelStore.loaderModel(ModelName.character, '/src/assets/model/Xbot.glb')
-const character = scene
+const {scene: character, animations} = await modelStore.loaderModel(ModelName.character, '/src/assets/model/Xbot.glb')
 // 相机
 const camera = ref()
 /**
@@ -32,10 +32,12 @@ const initCharacterCapsule = () => {
 }
 
 // 保存动作
-const actions: {[key: string]: AnimationAction} = {}
+// const actions: {[key: string]: AnimationAction} = {}
 // 当前动作
 let currentAction: AnimationAction
-const mixer = new AnimationMixer(character)
+// const mixer = new AnimationMixer(character)
+
+const {actions, mixer} = useAnimations(animations, character)
 /**
  * 初始化动作
  */
@@ -178,7 +180,8 @@ onLoop(({delta, elapsed, clock}) => {
     // 根据速度切换行走和跑步状态
     changePosition(speed === 1 ? 'walk' : 'run', front, delta * speed)
   }
-  mixer.update(delta)
+  // 使用 useAnimations 之后动作变快了，就给他 / 10 了
+  mixer.update(delta / 10)
 })
 
 /**
