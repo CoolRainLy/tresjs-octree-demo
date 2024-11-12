@@ -198,7 +198,7 @@ const changePosition = (actionName: string, position: Vector3, magnification: nu
       R
   )
   // 进行八叉树的运算
-  const octree = modelStore.octree
+  const octree = modelStore.getOctree
   const result = octree.capsuleIntersect(capsule)
   // 碰撞到了就平移回来
   if(result) {

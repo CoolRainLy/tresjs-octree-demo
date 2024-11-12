@@ -62,7 +62,10 @@ const useModelStore = defineStore('model', {
         // 获取胶囊数据
         getCapsule(state) {
             return state.characterCapsule
-        }
+        },
+        getOctree(state) {
+            return state.octree
+        },
     },
     actions: {
         // 加载模型并返回
